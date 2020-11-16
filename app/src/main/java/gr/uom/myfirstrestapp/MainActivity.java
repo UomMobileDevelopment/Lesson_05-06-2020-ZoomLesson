@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.jacksonandroidnetworking.JacksonParserFactory;
+
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 
@@ -20,15 +24,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize Library of Indian guy
-        AndroidNetworking.initialize(getApplicationContext());
-
-        // Then set the JacksonParserFactory like below
-        AndroidNetworking.setParserFactory(new JacksonParserFactory());
-
         setContentView(R.layout.activity_main);
 
-        GetDataTask getDataTaskObject = new GetDataTask();
+        ListView postListView = findViewById(R.id.postListView);
+
+        PostArrayAdapter postArrayAdapter =
+                new PostArrayAdapter(this,
+                        R.layout.list_record,
+                        new ArrayList<Post>(),
+                        postListView
+                );
+
+        GetDataTask getDataTaskObject = new GetDataTask(postArrayAdapter);
         getDataTaskObject.execute(REMOTE_API);
 
         Log.d(TAG, "STARTED Async Request Execution for Web Service Data");
